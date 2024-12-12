@@ -1,0 +1,157 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+  </div>
+</div>
+
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <!-- Select de plantas -->
+    <div class="col">
+      <select class="form-control" [(ngModel)]="selectedPlant" (change)="onSelectionChange()">
+        <option *ngFor="let plant of plants" [ngValue]="plant">
+          {{ plant.name }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Select de fecha -->
+    <div class="col">
+      <input type="date" class="form-control" [(ngModel)]="selectedDay" (change)="onSelectionChange()">
+    </div>
+  </div>
+  
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Detalle Niveles</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <!-- <th scope="col">Hora</th> -->
+                <th scope="col">Alias</th>
+                <!-- <th scope="col">Porcentaje</th> -->
+                <th scope="col">Capacidad</th>
+                <th scope="col">% final</th>
+                <th scope="col">Litros finales</th>
+                <th scope="col">Kilos finales</th>
+                <!-- <th scope="col">% final</th>
+                <th scope="col">Litros finales</th>
+                <th scope="col">Kilos finales</th> -->
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let storage of storages" >
+                <td>
+                  {{storage["name"]}}
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{storage["capacity"] | number}}
+                  </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{storage["end_percentage"] | number}} %
+                </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{storage["end_liters"] | number}} lts
+                </div>                
+                </td>2024-12-04T21:43:26.910Z
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{storage["end_kg"] | number}} kg
+                </div>                
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a class="btn btn-sm btn-icon-only text-light"  ngbDropdownToggle>
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+                      <a class="dropdown-item" (click)="showSupplyChart(storage.imei)">Ver gráfica</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Inventario final</h3>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Litros Arrastre</th>
+                <th scope="col">Arrastre KG</th>
+                <th scope="col">Litros Sensor</th>
+                <th scope="col">Kilos Sensor</th>
+                <th scope="col">Diferencia VS Sensor</th>
+                <th scope="col">% Diferencia VS Sensor</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  0
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    0
+                  </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{inventarioInicial.litrosSensor | number}}
+                  </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{inventarioInicial.kilosSensor | number}}
+                  </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    0
+                  </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    0
+                  </div>
+                </td>             
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

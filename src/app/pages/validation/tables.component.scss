@@ -1,0 +1,10 @@
+.blink {
+    animation: blinkAnimation 1s steps(5, start) 2;
+    background-color: #fcca0098;
+  }
+  
+  @keyframes blinkAnimation {
+    to {
+      visibility: hidden;
+    }
+  }

@@ -1,0 +1,106 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+  </div>
+</div>
+
+<!-- Page content -->
+<div class="container-fluid mt--7">
+  <!-- Table -->
+  <div class="row">
+    <!-- Select de plantas -->
+    <div class="col">
+      <select class="form-control">
+        <option  >
+          Cilindros
+        </option>
+        <option  >
+          Pipas y carb
+        </option>
+      </select>
+    </div>
+    <div class="col">
+      <select class="form-control" [(ngModel)]="selectedPlant" (change)="onSelectionChange()">
+        <option *ngFor="let plant of plants" [ngValue]="plant">
+          {{ plant.name }}
+        </option>
+      </select>
+    </div>
+  
+    <!-- Select de fecha -->
+    <div class="col">
+      <input type="date" class="form-control" [(ngModel)]="selectedDay" (change)="onSelectionChange()">
+    </div>
+  </div>
+  
+  <div class="row mt-4">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">ABASTECIMIENTOS</h3>
+            </div>
+            <div class="col text-right">
+              <a (click)="addSupplying()" class="btn btn-sm btn-primary">Agregar</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Hora</th>
+                <th scope="col">Tanque</th>
+                <!-- <th scope="col">Porcentaje</th> -->
+                <th scope="col">Kg Carta Porte</th>
+                <th scope="col">90% Litros</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let supply of supplyies" >
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{supply["insert_timestamp"] | date: 'hh:mm:ss a'}}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{supply["name"]}}
+                </td>
+                <!-- <td>
+                  <span class="badge badge-dot mr-4">
+                    {{supply["percentage"]}} %
+                  </span>
+                </td> -->
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{supply["kg"]}} kg
+                </div>                
+                </td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {{supply["liters"]}} lts
+                </div>                
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a class="btn btn-sm btn-icon-only text-light"  ngbDropdownToggle>
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+                      <!-- <a class="dropdown-item" (click)="onEditSupply(supply.id_suply)">Editar</a> -->
+                      <a class="dropdown-item" (click)="onDeleteSupply(supply.id_suply)">Eliminar</a>
+                      <!-- <a class="dropdown-item" >Pedir autorización</a> -->
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
