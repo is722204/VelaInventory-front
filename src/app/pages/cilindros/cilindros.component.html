@@ -41,9 +41,10 @@
                 <th scope="col">KG reales</th>
                 <th scope="col">Litros teóricos</th>
                 <th scope="col">Litros reales</th>
-                <th scope="col">Eficiencias</th>
+                <th scope="col">Almacenes</th>
                 <th scope="col">Residuos</th>
                 <th scope="col">Desperdicios</th>
+                <th scope="col">% almacenes</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -79,9 +80,14 @@
                     {{cilindro["residue"] | number: '1.2'}}
                   </div>
                 </td>
-                <td class="text-right">
+                <td>
                   <div class="d-flex align-items-center">
                     {{cilindro["waste_kg"] | number: '1.2'}}
+                  </div>
+                </td>
+                <td class="text-right">
+                  <div class="d-flex align-items-center">
+                    {{cilindro["percen_efficiency"]*100 | number: '1.2'}}%
                   </div>
                 </td>
               </tr>

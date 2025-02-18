@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import Swal from 'sweetalert2';
 import { Chart } from 'chart.js';
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,7 +23,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   selectedPlant = this.plants[0];
-  selectedDay: any = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+  selectedDay: any;
 
   storages: any = []
 
@@ -41,6 +42,7 @@ export class UserProfileComponent implements OnInit {
   onSelectionChange() {
     const date = this.selectedDay.toString().split("-")
     localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
+    localStorage.setItem("date",JSON.stringify(this.selectedDay.toString()))
     this.getSupplyByPlant(this.selectedPlant.id, date[0], date[1], date[2])
   }
 
@@ -48,11 +50,16 @@ export class UserProfileComponent implements OnInit {
   ngOnInit() {
     this.api.getPlants().subscribe(res => {
       this.plants = res
-	  if(localStorage.getItem("planta")){
-		this.selectedPlant=this.plants[this.plants.findIndex(e=>{return e.id==JSON.parse(localStorage.getItem("planta")).id})]
-	  }else{
-		this.selectedPlant = this.plants[0]
-	  }
+      const selectedPlantId = JSON.parse(localStorage.getItem("planta"))?.id;
+      this.selectedPlant = this.plants.find(plant => plant.id === selectedPlantId) || this.plants[0];
+      
+      const date = localStorage.getItem("date")
+      if(date){
+        this.selectedDay = new Date(date).toLocaleDateString('en-CA')
+      }
+      else {
+        this.selectedDay = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+      }
       
       this.onSelectionChange()
     })
@@ -65,6 +72,10 @@ export class UserProfileComponent implements OnInit {
     this.totalKilosFinales=0
 
     this.api.getStorageByPlant(id_plant, year, month, day).subscribe((res:any) => {
+      this.totalLitrosIniciales=0;
+      this.totalKilosIniciales=0
+      this.totalLitrosFinales=0
+      this.totalKilosFinales=0
       console.log(res)
       this.storages = res.sort((a, b) => a.name.localeCompare(b.name));
       res.forEach(element => {
@@ -134,20 +145,20 @@ export class UserProfileComponent implements OnInit {
     
   showSupplyChart(imei): void {
     const [year, month, day] = this.selectedDay.toString().split("-").map(Number);
-    const init=new Date(`${month}/${day}/${year}`)
-    const end=new Date(`${month}/${day}/${year}`)
-    this.api.getChartByImei(imei,init.getTime()-3600000,end.setHours(23,59,59,99)+3600000).subscribe((res:any)=>{
-      res.reverse()
+    const init = new Date(`${month}/${day}/${year}`);
+    const end = new Date(`${month}/${day}/${year}`);
+    
+    this.api.getChartByImei(imei, init.getTime() - 3600000, end.setHours(23, 59, 59, 99) + 3600000).subscribe((res: any) => {
+      res.reverse();
       Swal.fire({
         title: 'Histórico Porcentaje vs Tiempo',
         html: '<canvas id="supplyChart" style="width:100%; height:300px;"></canvas>',
         showCancelButton: true,
         confirmButtonText: 'Cerrar',
         didOpen: () => {
-          // Generar el gráfico cuando el modal esté abierto
           const labels = res.map(item => new Date(parseInt(item.timestamp)).toLocaleTimeString());
           const data = res.map(item => item.level_percentage);
-  
+
           const ctx = document.getElementById('supplyChart') as HTMLCanvasElement;
           new Chart(ctx, {
             type: 'line',
@@ -167,29 +178,42 @@ export class UserProfileComponent implements OnInit {
             options: {
               responsive: true,
               scales: {
-                x: {
-                  title: {
-                    display: true,
-                    text: 'Fecha'
+                xAxes: [
+                  {
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Hora'
+                    }
                   }
-                },
-                y: {
-                  title: {
-                    display: true,
-                    text: 'Porcentaje (%)'
-                  },
-                  beginAtZero: true,
-                  max: 100
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      beginAtZero: true, // Comienza desde 0
+                      min: 0, // Valor mínimo
+                      max: 100, // Valor máximo
+                      stepSize: 10, // Incrementos del eje Y
+                      callback: (value) => `${value}%` // Muestra el símbolo % en las etiquetas
+                    }
+                  }
+                ]
+              },
+              legend: {
+                display: true,
+                position: 'top'
+              },
+              tooltips: {
+                callbacks: {
+                  label: (tooltipItem) => `Porcentaje: ${tooltipItem.yLabel}%`
                 }
               }
             }
           });
         }
       });
-    })
-    // Crear el modal de SweetAlert2
+    });
+}
 
-  }
 
 
 

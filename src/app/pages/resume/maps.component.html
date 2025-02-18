@@ -2,12 +2,24 @@
   <div class="container-fluid">
     <div class="header-body">
       <div class="row justify-content-end">
-        <div class="btn-container">
+        <!-- <div class="btn-container">
           <label class="switch btn-color-mode-switch">
-            <input value="1" id="color_mode" name="color_mode" type="checkbox" disabled>
-            <label class="btn-color-mode-switch-inner" data-off="Kilos" data-on="Litros" for="color_mode"></label>
+            <input
+              type="checkbox"
+              id="color_mode"
+              name="color_mode"
+              [(ngModel)]="isLitros"
+              [disabled]="isDisabled"
+            />
+            <label
+              class="btn-color-mode-switch-inner"
+              data-off="Kilos"
+              data-on="Litros"
+              for="color_mode"
+            ></label>
           </label>
-        </div>
+        </div> -->
+        
         
       </div>
       <div class="row justify-content-between">
@@ -73,93 +85,7 @@
         </div>
       </div>
       <!-- Card stats -->
-      <div class="row mt-3">
-        
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Inventario inicial</h5>
-                  <span class="h2 font-weight-bold mb-0">{{totalInventarioInicial | number: '1.'}} </span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i class="fas fa-users"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <!-- <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> 24%</span> -->
-                <span class="text-nowrap">KG</span>
-              </p>
-            </div>
-          </div>
-        </div>
 
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Entradas</h5>
-                  <span class="h2 font-weight-bold mb-0">{{totalEntradas | number: '1.2'}}</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
-                    <i class="fas fa-chart-pie"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <!-- <span class="text-success mr-2"><i class="fa fa-arrow-up"></i>3,524</span> -->
-                <span class="text-nowrap">KG</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Salidas</h5>
-                  <span class="h2 font-weight-bold mb-0">{{totalSalidas | number: '1.2'}}</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
-                    <i class="fas fa-chart-bar"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <span class="text-nowrap">KG</span>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-lg-6">
-          <div class="card card-stats mb-4 mb-xl-0">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <h5 class="card-title text-uppercase text-muted mb-0">Inventario final</h5>
-                  <span class="h2 font-weight-bold mb-0">{{totalInventarioFinal | number: '1.'}}</span>
-                </div>
-                <div class="col-auto">
-                  <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                    <i class="fas fa-users"></i>
-                  </div>
-                </div>
-              </div>
-              <p class="mt-3 mb-0 text-muted text-sm">
-                <!-- <span class="text-warning mr-2"><i class="fas fa-arrow-down"></i> -</span> -->
-                <span class="text-nowrap">KG</span>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -184,18 +110,19 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col"  class="">Fecha</th>
-                <th scope="col"  class="pink-background bold">Inv. inicial Sensor</th>
+                <th scope="col"  class="pink-background bold">Inv. inicial <br> Sensor</th>
+                <th scope="col"  class="pink-background bold">Inv. inicial <br> Sensor</th>
                 <th scope="col"  class="pink-background bold">Descargas</th>
                 <th scope="col"  class="blue-background bold">Cilindros</th>
                 <th scope="col"  class="blue-background bold">Pipas</th>
                 <th scope="col"  class="gray-background bold">Carburación</th>
-                <th scope="col"  class="gray-background bold">Inv. Final Teórico </th>
-                <th scope="col"  class="gray-background bold">Inv. Final Teórico CE</th>
-                <th scope="col"  class="gray-background bold">Inv. Final Sensor</th>
-                <th scope="col"  class="gray-background bold">DIF Final Teórico VS sensor</th>   
-                <th scope="col"  class="gray-background bold">DIF % Final Teórico VS sensor</th>                                                             
-                <th scope="col"  class="gray-background bold">DIF Final Teórico CE VS sensor</th>                                
-                <th scope="col"  class="gray-background bold">DIF %Final Teórico CE VS sensor</th>                                
+                <th scope="col"  class="gray-background bold">Inv. Final <br> s/alm </th>
+                <!-- <th scope="col"  class="gray-background bold">Inv. Final <br> Teórico CE</th> -->
+                <th scope="col"  class="gray-background bold">Inv. Final <br> c/alm</th>
+                <th scope="col"  class="gray-background bold">Almacén</th>   
+                <th scope="col"  class="gray-background bold">% Almacén</th>                                                             
+                <!-- <th scope="col"  class="gray-background bold">DIF Final Teórico <br> CE VS sensor</th>                                
+                <th scope="col"  class="gray-background bold">DIF %Final Teórico <br> CE VS sensor</th>                                 -->
               </tr>
             </thead>
             <tbody>
@@ -207,64 +134,69 @@
                 </td>
                 <td class="td-border pink-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.storage_init_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{registro.storage_init_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border pink-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.supplying_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{registro.storage_init_liters | number: '1.0-0'}} lts</span>
+                  </div>
+                </td>
+                <td class="td-border pink-background">
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2">{{registro.supplying_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border blue-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.portable_refill_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{registro.portable_refill_theorical_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border blue-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.pipe_refill_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{registro.pipe_refill_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border gray-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.carburation_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{registro.carburation_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border gray-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg) | number: '1.0' }} {{unidadMedida}}</span>
+                    <span class="mr-2">{{(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg) | number: '1.0-0' }} {{unidadMedida}}</span>
+                  </div>
+                </td>
+                <!-- <td class="td-border gray-background">
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2"> {{(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg) | number: '1.0-0' }} {{unidadMedida}}</span>
+                  </div>
+                </td> -->
+                <td class="td-border gray-background">
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2">{{registro.storage_end_kg | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border gray-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2"> {{(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg) | number: '1.0' }} {{unidadMedida}}</span>
+                    <span class="mr-2">{{(registro.storage_end_kg-(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg)) | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border gray-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{registro.storage_end_kg | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{((registro.storage_end_kg-(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg))/((registro.carburation_kg)+(registro.pipe_refill_kg)+(registro.portable_refill_theorical_kg)))*100 | number: '1.1-1'}} %</span>
+                  </div>
+                </td>
+                <!-- <td class="td-border gray-background">
+                  <div class="d-flex align-items-center">
+                    <span class="mr-2">{{(registro.storage_end_kg-(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg)) | number: '1.0-0'}} {{unidadMedida}}</span>
                   </div>
                 </td>
                 <td class="td-border gray-background">
                   <div class="d-flex align-items-center">
-                    <span class="mr-2">{{(registro.storage_end_kg-(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg)) | number: '1.0'}} {{unidadMedida}}</span>
+                    <span class="mr-2">{{((registro.storage_end_kg/((registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg)))-1)*100 | number: '1.0-0'}} %</span>
                   </div>
-                </td>
-                <td class="td-border gray-background">
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">{{((registro.storage_end_kg/((registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_theorical_kg-registro.pipe_refill_kg-registro.carburation_kg)))-1)*100 | number: '1.0'}} %</span>
-                  </div>
-                </td>
-                <td class="td-border gray-background">
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">{{(registro.storage_end_kg-(registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg)) | number: '1.0'}} {{unidadMedida}}</span>
-                  </div>
-                </td>
-                <td class="td-border gray-background">
-                  <div class="d-flex align-items-center">
-                    <span class="mr-2">{{((registro.storage_end_kg/((registro.storage_init_kg+registro.supplying_kg-registro.portable_refill_kg-registro.pipe_refill_kg-registro.carburation_kg)))-1)*100 | number: '1.0'}} %</span>
-                  </div>
-                </td>
+                </td> -->
               </tr>
             </tbody>
           </table>

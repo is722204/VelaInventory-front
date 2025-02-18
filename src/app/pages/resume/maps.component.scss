@@ -106,4 +106,24 @@
     background: #fff;
   }
   
+  table thead th:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+  table thead tr:first-child{
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+  table tbody td:first-child{
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background-color: #fff;
+  }
   
+
+  th{
+    text-align-last: center;
+  }

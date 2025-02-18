@@ -6,9 +6,9 @@ import { Injectable } from '@angular/core';
 })
 export class ApiService {
   constructor(private http:HttpClient) { }
-  url="http://localhost:3000"
-  // url="https://adminfota.s4iot.com"
-  //url=""
+  // url="http://localhost:3000"
+  // url="https://vela.s4iot.com"
+  url=""
 
   login(email:string,psw:string){
     let url=this.url+"/login";

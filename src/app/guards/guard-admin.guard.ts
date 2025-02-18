@@ -10,9 +10,8 @@ export class GuardAdminGuard implements CanActivate {
   canActivate(
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if(parseInt(localStorage.getItem("rol")!)!=1){
-      this.route.navigate(["login"])
-      console.log("no pasa")
+    if(parseInt(localStorage.getItem("rol"))){
+      this.route.navigate(["supplying"])
       return false
     }
     return true

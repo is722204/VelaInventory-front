@@ -15,11 +15,11 @@ import { InventarioFinalComponent } from 'src/app/pages/inventariofinal/inventar
 
 export const AdminLayoutRoutes: Routes = [
     { path: '',      component: LoginComponent },
-    { path: 'resume',          component: MapsComponent,canActivate:[AdminGuard] },
-    { path: 'supplying',          component: IconsComponent,canActivate:[AdminGuard,GuardAdminGuard] },
+    { path: 'resume',          component: MapsComponent,canActivate:[AdminGuard,GuardAdminGuard] },
+    { path: 'supplying',          component: IconsComponent,canActivate:[AdminGuard] },
     { path: 'inventory',      component: UserProfileComponent,canActivate:[AdminGuard,GuardAdminGuard] },
-    { path: 'cilindros',          component: CilindrosComponent,canActivate:[AdminGuard] },
-    { path: 'pipas',          component: PipasComponent,canActivate:[AdminGuard] },
-    { path: 'carburacion',          component: CarburacionComponent,canActivate:[AdminGuard] },
-    { path: 'inventariofinal',          component: InventarioFinalComponent,canActivate:[AdminGuard] },
+    { path: 'cilindros',          component: CilindrosComponent,canActivate:[AdminGuard,GuardAdminGuard] },
+    { path: 'pipas',          component: PipasComponent,canActivate:[AdminGuard,GuardAdminGuard] },
+    { path: 'carburacion',          component: CarburacionComponent,canActivate:[AdminGuard,GuardAdminGuard] },
+    { path: 'inventariofinal',          component: InventarioFinalComponent,canActivate:[AdminGuard,GuardAdminGuard] },
 ];

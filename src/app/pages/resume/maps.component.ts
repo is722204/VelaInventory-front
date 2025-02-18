@@ -13,6 +13,10 @@ import * as FileSaver from 'file-saver';
   styleUrls: ['./maps.component.scss']
 })
 export class MapsComponent implements OnInit {
+
+  isLitros: boolean = false; // Variable que refleja el estado del checkbox
+  isDisabled: boolean = true; // Controla si el checkbox está deshabilitado
+  
   unidadMedida="Kg"
   plants: any = [];
   //PARA LAS CARDS
@@ -57,21 +61,24 @@ export class MapsComponent implements OnInit {
 	console.log(this.fromDate,this.toDate, this.selectedPlant)
 	localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
 	this.api.getDashboard(this.selectedPlant.id,`${this.fromDate.year}-${this.fromDate.month}-${this.fromDate.day}`,`${this.toDate.year}-${this.toDate.month}-${this.toDate.day}`).subscribe(res=>{
-		console.log(res)
+		this.totalSalidas=0 
+		this.totalEntradas=0
 		this.registros=res
 		this.totalInventarioInicial=this.registros[0].storage_init_kg || 0
 		this.totalInventarioFinal=this.registros[this.registros.length-1].storage_end_kg || 0
 		this.registros.forEach((element:any) => {
-			this.totalSalidas+=element.portable_refill_kg 
-			this.totalEntradas+=element.supplying_kg
-			// this.totalInventarioInicial+=element.storage_init_kg
-			// this.totalInventarioFinal+=element.storage_end_kg
+			//Tomar en cuenta que se está redondeando sin decimales
+			this.totalSalidas+=parseFloat(parseFloat(element.portable_refill_theorical_kg).toFixed(2))
+			this.totalSalidas+=parseFloat(parseFloat(element.pipe_refill_kg ).toFixed(0))
+			this.totalSalidas+=parseFloat(parseFloat(element.carburation_kg ).toFixed(0))
+			this.totalEntradas+=parseFloat(parseFloat(element.supplying_kg).toFixed(0))
 		});
 	})
   }
 
-
-
+  toggleCheckbox(): void {
+	this.isLitros = !this.isLitros;
+  }
 
 
   exportDataToExcel(): void {
@@ -84,128 +91,64 @@ export class MapsComponent implements OnInit {
 		'Cilindros',
 		'Pipas',
 		'Carburación',
-		'Inventario Final Teórico',
-		'Inventario Final Teórico CE',
-		'Inventario Final Sensor',
-		'DIF Final Teórico VS sensor',
-		'DIF % Final Teórico VS sensor',
-		'DIF Final Teórico CE VS sensor',
-		'DIF %Final Teórico CE VS sensor',
+		'Inventario Final s/alm',
+		'Inventario Final c/alm',
+		'Almacén',
+		'% Almacén',
 	  ],
 	];
   
 	const numberFormatter = new Intl.NumberFormat('en-US', {
-	  minimumFractionDigits: 3,
-	  maximumFractionDigits: 3,
+	  minimumFractionDigits: 0,
+	  maximumFractionDigits: 0,
+	});
+	const numberFormatter2 = new Intl.NumberFormat('en-US', {
+	  minimumFractionDigits: 0,
+	  maximumFractionDigits: 1,
 	});
   
 	const data = this.registros.map((registro: any) => {
 	  const inventarioInicialSensor = registro.storage_init_kg || 0;
 	  const descargas = registro.supplying_kg || 0;
-	  const cilindros = registro.portable_refill_kg || 0;
+	  const cilindros = registro.portable_refill_theorical_kg || 0;
 	  const pipas = registro.pipe_refill_kg || 0;
 	  const carburacion = registro.carburation_kg || 0;
 	  const inventarioFinalSensor = registro.storage_end_kg || 0;
   
-	  // Cálculos de inventarios
-	  const inventarioFinalTeorico =
-		inventarioInicialSensor +
-		descargas -
-		registro.portable_refill_theorical_kg -
-		pipas -
-		carburacion;
+	  // Cálculo de Inventario Final s/alm (sin almacén)
+	  const inventarioFinalSinAlm =
+		inventarioInicialSensor + descargas - cilindros - pipas - carburacion;
   
-	  const inventarioFinalTeoricoCE =
-		inventarioInicialSensor +
-		descargas -
-		cilindros -
-		pipas -
-		carburacion;
+	  // Cálculo de Almacén
+	  const almacen = inventarioFinalSensor - inventarioFinalSinAlm;
   
-	  const difFinalTeoricoVsSensor = inventarioFinalSensor - inventarioFinalTeorico;
-  
-	  const porcentajeFinalTeoricoVsSensor =
-		inventarioFinalTeorico !== 0
-		  ? ((inventarioFinalSensor / inventarioFinalTeorico) - 1) * 100
-		  : 0;
-  
-	  const difFinalTeoricoCEVsSensor = inventarioFinalSensor - inventarioFinalTeoricoCE;
-  
-	  const porcentajeFinalTeoricoCEVsSensor =
-		inventarioFinalTeoricoCE !== 0
-		  ? ((inventarioFinalSensor / inventarioFinalTeoricoCE) - 1) * 100
+	  // Cálculo del % Almacén
+	  const porcentajeAlmacen =
+		(cilindros + pipas + carburacion) !== 0
+		  ? (almacen / (cilindros + pipas + carburacion)) * 100
 		  : 0;
   
 	  return [
 		registro.supplying_date.toString().split('T')[0], // Fecha
-		numberFormatter.format(Math.round(inventarioInicialSensor)) + ' Kg',
-		numberFormatter.format(Math.round(descargas)) + ' Kg',
-		numberFormatter.format(Math.round(cilindros)) + ' Kg',
-		numberFormatter.format(Math.round(pipas)) + ' Kg',
-		numberFormatter.format(Math.round(carburacion)) + ' Kg',
-		numberFormatter.format(Math.round(inventarioFinalTeorico)) + ' Kg',
-		numberFormatter.format(Math.round(inventarioFinalTeoricoCE)) + ' Kg',
-		numberFormatter.format(Math.round(inventarioFinalSensor)) + ' Kg',
-		numberFormatter.format(Math.round(difFinalTeoricoVsSensor)) + ' Kg',
-		numberFormatter.format(Math.round(porcentajeFinalTeoricoVsSensor)) + ' %',
-		numberFormatter.format(Math.round(difFinalTeoricoCEVsSensor)) + ' Kg',
-		numberFormatter.format(Math.round(porcentajeFinalTeoricoCEVsSensor)) + ' %',
+		numberFormatter.format(inventarioInicialSensor) + ' Kg',
+		numberFormatter.format(descargas) + ' Kg',
+		numberFormatter.format(cilindros) + ' Kg',
+		numberFormatter.format(pipas) + ' Kg',
+		numberFormatter.format(carburacion) + ' Kg',
+		numberFormatter.format(inventarioFinalSinAlm) + ' Kg',
+		numberFormatter.format(inventarioFinalSensor) + ' Kg',
+		numberFormatter.format(almacen) + ' Kg',
+		numberFormatter2.format(porcentajeAlmacen) + ' %',
 	  ];
 	});
   
-	const worksheetData = [...headers, ...data];
-	const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
-	const workbook = XLSX.utils.book_new();
-	XLSX.utils.book_append_sheet(workbook, worksheet, 'INVENTARIO');
+	const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([...headers, ...data]);
+	const wb: XLSX.WorkBook = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(wb, ws, 'Reporte');
   
-	const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-	const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-	FileSaver.saveAs(
-	  blob,
-	  `ReporteDeInventario_${this.selectedPlant.name}_${new Date()
-		.toISOString()
-		.split('T')[0]}.xlsx`
-	);
+	XLSX.writeFile(wb, `Reporte_Inventario_${this.selectedPlant.name}.xlsx`);
   }
   
-  
-  
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   calendar = inject(NgbCalendar);
 	formatter = inject(NgbDateParserFormatter);
 
@@ -225,7 +168,6 @@ export class MapsComponent implements OnInit {
 		if(this.fromDate && this.toDate){
 			this.onSelectionChange()
 		}
-
 	}
 
 	isHovered(date: NgbDate) {
@@ -251,21 +193,5 @@ export class MapsComponent implements OnInit {
 		const parsed = this.formatter.parse(input);
 		return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

@@ -11,7 +11,7 @@ export class CarburacionComponent implements OnInit {
   plants: any = [];
 
   selectedPlant = this.plants[0];
-  selectedDay: any = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+  selectedDay: any;
 
   carburaciones: any = []
   constructor(private api: ApiService) { }
@@ -19,6 +19,7 @@ export class CarburacionComponent implements OnInit {
   onSelectionChange() {
     const date = this.selectedDay.toString().split("-")
     localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
+    localStorage.setItem("date",JSON.stringify(this.selectedDay.toString()))
     this.getSupplyByPlant(this.selectedPlant.id, date[0], date[1], date[2])
   }
 
@@ -26,11 +27,16 @@ export class CarburacionComponent implements OnInit {
   ngOnInit() {
     this.api.getPlants().subscribe(res => {
       this.plants = res
-	  if(localStorage.getItem("planta")){
-		this.selectedPlant=this.plants[this.plants.findIndex(e=>{return e.id==JSON.parse(localStorage.getItem("planta")).id})]
-	  }else{
-		this.selectedPlant = this.plants[0]
-	  }
+      const selectedPlantId = JSON.parse(localStorage.getItem("planta"))?.id;
+      this.selectedPlant = this.plants.find(plant => plant.id === selectedPlantId) || this.plants[0];
+      
+      const date = localStorage.getItem("date")
+      if(date){
+        this.selectedDay = new Date(date).toLocaleDateString('en-CA')
+      }
+      else {
+        this.selectedDay = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+      }
       
       this.onSelectionChange()
     })

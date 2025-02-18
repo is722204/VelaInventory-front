@@ -31,7 +31,7 @@
               <h3 class="mb-0">ABASTECIMIENTOS</h3>
             </div>
             <div class="col text-right">
-              <a style="background: transparent;box-shadow: none;border-color: transparent;" (click)="addSupplying()" class="btn btn-sm btn-primary">Agregar</a>
+              <a style="box-shadow: none;border-color: transparent;" (click)="addSupplying()" class="btn btn-sm btn-primary">Agregar</a>
             </div>
           </div>
         </div>
@@ -43,8 +43,8 @@
                 <th scope="col">Transporte</th>
                 <th scope="col">Kg Carta Porte</th>
                 <th scope="col">KG RI</th>
-                <th scope="col">Eficiencias</th>
-                <th scope="col">% Eficiencias</th>
+                <th scope="col" *ngIf="rol==0">Almacenes</th>
+                <th scope="col" *ngIf="rol==0">% Almacen</th>
                 <th scope="col"></th>
               </tr>
             </thead>
@@ -70,12 +70,12 @@
                     {{supply["kg"] | number: '1.2'}}
                 </div>                
                 </td>
-                <td>
+                <td *ngIf="rol==0">
                   <div class="d-flex align-items-center">
                     {{supply["effiency"] | number: '1.2'}}
                 </div>                
                 </td>
-                <td>
+                <td *ngIf="rol==0">
                   <div class="d-flex align-items-center">
                     {{((supply["kg"]/supply["document_kg"])-1)*100 | number: '1.3'}} %
                 </div>                
@@ -92,6 +92,29 @@
                     </div>
                   </div>
                 </td>
+              </tr>
+              <tr class="font-weight-bold">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">TOTAL</span>
+                    </div>
+                  </div>
+                </th>
+                <td class="text-center"></td>
+                <td>
+                  {{ getTotal('document_kg') | number: '1.2' }}
+                </td>
+                <td>
+                  {{ getTotal('kg') | number: '1.2' }}
+                </td>
+                <td>
+                  
+                </td>
+                <td>
+                  
+                </td>
+                <td></td>
               </tr>
             </tbody>
           </table>

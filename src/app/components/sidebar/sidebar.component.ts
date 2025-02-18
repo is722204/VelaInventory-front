@@ -8,7 +8,7 @@ declare interface RouteInfo {
     class: string;
 }
 
-export const ROUTES: RouteInfo[] = [
+export let ROUTES: RouteInfo[] = [
     { path: '/resume', title: 'Dashboard',  icon: 'ni ni-chart-pie-35', class: '' },
     { path: '/inventory', title: 'Niveles Sensor',  icon:'ni ni-archive-2', class: '' },
     { path: '/supplying', title: 'Descargas',  icon:'ni ni-app', class: '' },
@@ -31,7 +31,12 @@ export class SidebarComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    this.menuItems = ROUTES.filter(menuItem => menuItem);
+    if(!parseInt(localStorage.getItem("rol"))){
+      this.menuItems = ROUTES.filter(menuItem => menuItem);
+    }else{
+      this.menuItems=[{ path: '/supplying', title: 'Descargas',  icon:'ni ni-app', class: '' }]
+    }
+    
     this.router.events.subscribe((event) => {
       this.isCollapsed = true;
    });

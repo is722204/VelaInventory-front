@@ -9,28 +9,41 @@ import Swal from 'sweetalert2';
 })
 export class IconsComponent implements OnInit {
   plants: any = [];
-
+  rol:any=1
   selectedPlant = this.plants[0];
-  selectedDay: any = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+  selectedDay: any;
 
   supplyies: any = []
   constructor(private api: ApiService) { }
 
   onSelectionChange() {
+    
     const date = this.selectedDay.toString().split("-")
     localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
+    localStorage.setItem("date",JSON.stringify(this.selectedDay.toString()))
     this.getSupplyByPlant(this.selectedPlant.id, date[0], date[1], date[2])
   }
 
 
   ngOnInit() {
-    this.api.getPlants().subscribe(res => {
+    this.rol=localStorage.getItem("rol")
+    this.api.getPlants().subscribe((res:any) => {
       this.plants = res
-	  if(localStorage.getItem("planta")){
-		this.selectedPlant=this.plants[this.plants.findIndex(e=>{return e.id==JSON.parse(localStorage.getItem("planta")).id})]
-	  }else{
-		this.selectedPlant = this.plants[0]
-	  }
+      let selectedPlantId = JSON.parse(localStorage.getItem("planta"))?.id;
+      this.selectedPlant = this.plants.find(plant => plant.id === selectedPlantId) || this.plants[0];
+      if(JSON.parse(localStorage.getItem("rol"))){
+        console.log("No es admin")
+        this.plants=[res.find(plant => plant.id === parseInt(localStorage.getItem("rol")))]
+        selectedPlantId=localStorage.getItem("rol")
+        this.selectedPlant = res.find(plant => plant.id === selectedPlantId) || this.plants[0];
+      }
+      const date = localStorage.getItem("date")
+      if(date){
+        this.selectedDay = new Date(date).toLocaleDateString('en-CA')
+      }
+      else {
+        this.selectedDay = new Date(new Date().getTime()-86400000).toLocaleDateString('en-CA');
+      }
       
       this.onSelectionChange()
     })
@@ -103,6 +116,12 @@ export class IconsComponent implements OnInit {
       if(res.isConfirmed){
         this.api.deleteSupplyByPlant(this.selectedPlant.id,id_supply).subscribe(res=>{
           window.location.reload()
+        },err=>{
+          Swal.fire({
+            icon:"error",
+            title:"Error",
+            text:err.error.error
+          })
         })
       }
     })
@@ -111,5 +130,7 @@ export class IconsComponent implements OnInit {
   onEditSupply(){
   }
 
-
+  getTotal(column: string): number {
+    return this.supplyies.reduce((total, supply) => total + (supply[column] || 0), 0);
+  }
 }
