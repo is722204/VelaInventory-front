@@ -130,15 +130,15 @@ export class MapsComponent implements OnInit {
   
 	  return [
 		registro.supplying_date.toString().split('T')[0], // Fecha
-		numberFormatter.format(inventarioInicialSensor) + ' Kg',
-		numberFormatter.format(descargas) + ' Kg',
-		numberFormatter.format(cilindros) + ' Kg',
-		numberFormatter.format(pipas) + ' Kg',
-		numberFormatter.format(carburacion) + ' Kg',
-		numberFormatter.format(inventarioFinalSinAlm) + ' Kg',
-		numberFormatter.format(inventarioFinalSensor) + ' Kg',
-		numberFormatter.format(almacen) + ' Kg',
-		numberFormatter2.format(porcentajeAlmacen) + ' %',
+		numberFormatter.format(inventarioInicialSensor) ,
+		numberFormatter.format(descargas) ,
+		numberFormatter.format(cilindros) ,
+		numberFormatter.format(pipas),
+		numberFormatter.format(carburacion),
+		numberFormatter.format(inventarioFinalSinAlm),
+		numberFormatter.format(inventarioFinalSensor),
+		numberFormatter.format(almacen),
+		numberFormatter2.format(porcentajeAlmacen),
 	  ];
 	});
   

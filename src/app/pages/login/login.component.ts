@@ -10,13 +10,14 @@ import { ApiService } from 'src/app/services/api.service';
 export class LoginComponent implements OnInit, OnDestroy {
   email=""
   password:""
+  showPass: boolean = false
+  message:string = ""
   constructor(private apiservice:ApiService,private router:Router) {}
 
   ngOnInit() {
   }
   ngOnDestroy() {
   }
-
   onSignIn(){
     this.apiservice.login(this.email,this.password).subscribe(
       (res:any)=>{
@@ -26,7 +27,9 @@ export class LoginComponent implements OnInit, OnDestroy {
         localStorage.setItem("rol",res.rol)
         this.router.navigate(["/resume"])
       },err=>{
+
         console.log("error",err)
+        this.message = err.error.error
       }
   )
   }

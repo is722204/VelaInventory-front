@@ -7,8 +7,8 @@ import { Injectable } from '@angular/core';
 export class ApiService {
   constructor(private http:HttpClient) { }
   // url="http://localhost:3000"
-  // url="https://vela.s4iot.com"
-  url=""
+  url="https://vela.s4iot.com"
+  // url=""
 
   login(email:string,psw:string){
     let url=this.url+"/login";
@@ -159,6 +159,13 @@ export class ApiService {
   }
   getDescargasPegasus(planta,fecha){
     return this.http.get(`https://api-pegasus.s4iot.com/exportarDescargas/${planta}/${fecha}`)
+  }
+
+  generateReport(planta,fecha,tipo){
+    
+    let shareServers = tipo == "cilindros" && planta == 1 //Temporal
+
+    return this.http.post(`${this.url}/${tipo}/insert${shareServers?"-combine":""}`,{"days":[fecha],"selectedPlants":[planta]})
   }
 
 

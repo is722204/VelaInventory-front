@@ -17,7 +17,6 @@ export class IconsComponent implements OnInit {
   constructor(private api: ApiService) { }
 
   onSelectionChange() {
-    
     const date = this.selectedDay.toString().split("-")
     localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
     localStorage.setItem("date",JSON.stringify(this.selectedDay.toString()))
@@ -56,6 +55,7 @@ export class IconsComponent implements OnInit {
   }
 
   addSupplying() {
+    const date = this.selectedDay.toString()
     Swal.fire({
       title: 'Agregar Abastecimiento',
       html: `
@@ -64,6 +64,7 @@ export class IconsComponent implements OnInit {
           <input id="transport" class="swal2-input" placeholder="Transporte" type="text">
           <input id="kgCartaPorte" class="swal2-input" placeholder="KG Carta Porte" type="number">
           <input id="kgRI" class="swal2-input" placeholder="KG RI" type="number">
+          <input id="fecha" class="swal2-input" placeholder="Fecha" type="date" value="${date}"
         </div>`,
       confirmButtonText: 'Agregar',
       showCancelButton: true,
@@ -72,22 +73,23 @@ export class IconsComponent implements OnInit {
         const transport = (document.getElementById('transport') as HTMLInputElement).value.trim();
         const kgCartaPorte = parseFloat((document.getElementById('kgCartaPorte') as HTMLInputElement).value);
         const kgRI = parseFloat((document.getElementById('kgRI') as HTMLInputElement).value);
+        const fecha = (document.getElementById('fecha') as HTMLInputElement).value;
+        console.log(fecha)
   
-        if (!folio || !transport || isNaN(kgCartaPorte) || isNaN(kgRI)) {
+        if (!folio || !transport || isNaN(kgCartaPorte) || isNaN(kgRI) || !fecha) {
           Swal.showValidationMessage('Todos los campos son obligatorios y deben ser válidos');
           return;
         }
   
-        return { folio, transport, kgCartaPorte, kgRI };
+        return { folio, transport, kgCartaPorte, kgRI, fecha };
       }
     }).then((result) => {
       if (result.isConfirmed) {
         const supplyingData = result.value;
         // Aquí puedes agregar la lógica para enviar los datos a tu API o manejarlos como prefieras
-        console.log('Datos enviados:', supplyingData);
   
         // Ejemplo de petición a la API (ajusta según tu implementación)
-        const date = this.selectedDay.toString().split("-")
+        const date = supplyingData.fecha.toString().split("-")
         this.api.addSupplyByPlant(
           this.selectedPlant.id,
           date[0],

@@ -35,6 +35,7 @@ export class CilindrosComponent implements OnInit {
     localStorage.setItem("planta",JSON.stringify(this.selectedPlant))
     localStorage.setItem("date",JSON.stringify(this.selectedDay.toString()))
     this.getSupplyByPlant(this.selectedPlant.id, date[0], date[1], date[2])
+
   }
 
 
@@ -139,8 +140,38 @@ export class CilindrosComponent implements OnInit {
     })
   }
 
-  onEditSupply(){
+  regenerateCSV() {
+    let plantid = this.selectedPlant.id;
+    let date = this.selectedDay;
+    Swal.fire({
+      title: 'Generando archivo...',
+      text: 'Por favor espere...',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.api.generateReport(plantid, date, "cilindros").subscribe((res: any) => {
+      Swal.close();
+      Swal.fire({
+        icon: "success",
+        title: "Archivo generado con éxito",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.reload();
+        }
+      });
+      }, (error) => {
+      Swal.close();
+      Swal.fire({
+        icon: "error",
+        title: "Error al generar el archivo",
+        text: "Hubo un problema al generar el archivo. Intenta de nuevo más tarde.",
+      });
+    });
   }
+  
 
   mostrarTablaPegasus(id_plant,year,month,day){
     const plantas=["","altos","zapopan","atequiza","autlan","cocula","guzman","tecolotlan","cihuatlan"]

@@ -92,23 +92,21 @@
 <!-- Page content -->
 <div class="container-fluid mt--7">
   <!-- Table -->
-  <div class="row">
-    <div class="col">
-      <div class="card shadow">
-        <div class="card-header border-0">
+      <div class="card shadow"  style="overflow-y: auto; max-height: 75vh;">
+        <div class="card-header">
           <div class="row align-items-center">
             <div class="col">
-              <h3 class="mb-0">RESUMEN INVENTARIO</h3>
+              <h3>RESUMEN INVENTARIO</h3>
             </div>
             <div class="col text-right">
               <a (click)="exportDataToExcel()" class="btn btn-sm btn-primary">Exportar</a>
             </div>
           </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 75vh; overflow-y: auto;">
           <table class="table align-items-center table-flush">
             <thead class="thead-light">
-              <tr>
+              <tr class="py-1">
                 <th scope="col"  class="">Fecha</th>
                 <th scope="col"  class="pink-background bold">Inv. inicial <br> Sensor</th>
                 <th scope="col"  class="pink-background bold">Inv. inicial <br> Sensor</th>
@@ -203,7 +201,7 @@
         </div>
         
       </div>
-    </div>
-  </div>
+
+
 
 </div>

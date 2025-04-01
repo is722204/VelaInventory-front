@@ -122,6 +122,37 @@ export class CarburacionComponent implements OnInit {
 
   onEditSupply(){
   }
+      regenerateCSV() {
+        let plantid = this.selectedPlant.id;
+        let date = this.selectedDay;
+        Swal.fire({
+          title: 'Generando archivo...',
+          text: 'Por favor espere...',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+      
+        this.api.generateReport(plantid, date, "pipas").subscribe((res: any) => {
+          Swal.close();
+          Swal.fire({
+            icon: "success",
+            title: "Archivo generado con éxito",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.reload();
+            }
+          });
+          }, (error) => {
+          Swal.close();
+          Swal.fire({
+            icon: "error",
+            title: "Error al generar el archivo",
+            text: "Hubo un problema al generar el archivo. Intenta de nuevo más tarde.",
+          });
+        });
+      }
 
  
 }
